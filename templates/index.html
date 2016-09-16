@@ -1,0 +1,186 @@
+
+{% block body %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js">
+
+
+
+
+</script>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<title>ybe</title>
+
+<html>
+    <!-- jQuery library -->
+
+<div id="logerr" style="display:none;"><span style="font-size:25px;color:white;">Error In Login Credentials!</span></div>
+<script type="text/javascript">
+    var logerr = String(location.search.split('logerr=')[1])
+    if (logerr == "True") {
+    document.getElementById('logerr').style.display = "block";
+    }
+
+
+</script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+
+</script>
+
+<link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="/static/ot/style.css">
+{% if err==True %}
+<script>
+
+
+
+$( document ).ready(function() {
+$("#myModal").modal();
+});
+</script>
+{% endif %}
+<script type="text/javascript">
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+  var msViewportStyle = document.createElement('style')
+  msViewportStyle.appendChild(
+    document.createTextNode(
+      '@-ms-viewport{width:auto!important}'
+    )
+  )
+  document.querySelector('head').appendChild(msViewportStyle)
+}
+</script>
+<script>
+    $(function () {
+  var nua = navigator.userAgent
+  var isAndroid = (nua.indexOf('Mozilla/5.0') > -1 && nua.indexOf('Android ') > -1 && nua.indexOf('AppleWebKit') > -1 && nua.indexOf('Chrome') === -1)
+  if (isAndroid) {
+    $('select.form-control').removeClass('form-control').css('width', '100%')
+  }
+})
+</script>
+    <body>
+
+
+    </body>
+    <div id="main" ALIGN="center">
+
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Please Login</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+	{% from "minion.html" import render_field %}
+	<form method="post" action="/register/">
+		<dl>
+			{{ render_field(formr.name)  }}
+			{{ render_field(formr.classs)  }}
+			{{ render_field(formr.sec)  }}
+
+
+			{{ render_field(formr.admno)  }}
+		</dl>
+
+
+
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <p>
+			<input type="submit" value="submit">
+		</p></form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div id="bta">
+
+    {% if session.logged_in %}
+    <button class="butc" type="button" id="btn1" onClick="window.location.href='/logout/'">Logout</button>
+    <button class="butc" type="button" id="btn2" onClick="window.location.href='/search?sin=None&sis=None&lt=None'">Posts</button>
+    {% else %}
+    <button class="butc" type="button" data-toggle="modal" data-target="#myModal" id="btn1a">Login</button>
+    <button class="butc" id="btn1b" onClick="window.location.href='/loginopr/'">Login</button>
+    <button class="butc" type="button" id="btn2" onClick="window.location.href='/search?sin=None&sis=None&lt=None'">Posts</button>
+    {% endif %}</div>
+<script type="text/javascript">
+    function oprc (){
+        if (~navigator.userAgent.indexOf('Opera Mini')) {
+    document.getElementById('btn1a').style.display = 'none';
+                                                        }
+        else  {
+            document.getElementById('btn1b').style.display = 'none';
+        }
+
+    }
+    oprc();
+
+</script>
+    </div>
+</html>
+<div id="line"></div>
+
+
+
+
+
+
+
+<div class="container" id="ia">
+    {% if session.logged_in %}
+    {% if picc==1 %}
+    Update your picture?
+    Picture : <img src="/getimg?admno={{ session['admno'] }}" style="width:50px;height:50px;border-radius:50%;">
+    {% endif %}
+    {% if picc==0 %}
+    Haven't setup your picture yet?
+    {% endif %}
+
+	{% from "minion.html" import render_field %}
+	<form method="post" enctype="multipart/form-data" action="/home/">
+		<dl>
+
+			<input type = "file" name = "file" id="file"/>
+
+		</dl>
+		<p>
+			<input type="submit" value="submit">
+		</p>
+		</form>
+    {% endif %}
+
+
+</div>
+
+</html>
+
+<noscript><meta HTTP-EQUIV="REFRESH" content="0; url=http://ybehwp.pythonanywhere.com/error/"></noscript>
+{% endblock %}

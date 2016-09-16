@@ -1,0 +1,110 @@
+.file-upload {
+  position: relative;
+  overflow: hidden;
+  margin: 10px; }
+
+.file-upload input.file-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0); }
+
+img {
+
+    border-radius:50%;}
+@media screen and (min-width: 240px) and (max-width:360px) {
+    #myModal {
+        margin-left:50px;
+        margin-right:50px;
+        margin-top:80px;
+    }
+}
+@media screen and (min-width: 1280px) {
+    #myModal {
+        margin-top:80px;
+    }
+}
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
+
+#posts {
+    color:#e1e1e1;
+}
+body {
+
+    background-image : url('http://3.1m.yt/v49Abt5.jpg');
+    background-repeat : no-repeat;
+    background-size : cover;
+    background-attachment:fixed;
+
+}
+#bta {
+width:100%;float:top;border-bottom:thin solid white;border-top:thin solid white;
+
+}
+#ia {
+    position:relative;float:top;margin-top:10px;
+
+}
+form {margin-right:53%;text-align:center;float:center;}
+.butc {background-color: Transparent;
+    background-repeat:no-repeat;
+    border-style: solid;
+    border-color: white;
+    cursor:pointer;
+    overflow: hidden;
+    outline:white;
+    padding : 0.5em 0.5em 0.5em 0.5em;
+    border-radius : 15px;
+    font-family : "Comic Sans MS", cursive, sans-serif;
+    color : white;
+    font-size : 25px;
+    font-weight : 900;
+
+
+
+
+
+
+
+
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;}
+.butc:hover {background-color: white;
+    background-repeat:no-repeat;
+    border-style: solid;
+    border-color: white;
+    cursor:pointer;
+    overflow: hidden;
+    outline:white;
+    padding : 0.5em 0.5em 0.5em 0.5em;
+    border-radius : 15px;
+    font-family : "Comic Sans MS", cursive, sans-serif;
+    color : black;
+    font-size : 25px;
+    font-weight : 900;
+
+
+
+
+
+
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;}
+
+#main {
+    text-align:center;
+
+}
+
+

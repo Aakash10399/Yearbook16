@@ -1,0 +1,18 @@
+{% include 'header.html' %}
+<div class="container">
+	{% from "minion.html" import render_field %}
+	<form id="modalf" method="post" action="/register/">
+		<dl>
+			{{ render_field(formr.name)  }}
+			{{ render_field(formr.classs)  }}
+			{{ render_field(formr.sec)  }}
+
+
+			{{ render_field(formr.admno)  }}
+		</dl>
+
+
+
+
+
+        </div>

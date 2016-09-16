@@ -1,0 +1,325 @@
+
+{% include 'header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<title>ybe</title>
+<style>
+    #imgbox img {
+        width:50px;
+        height:50px;
+
+
+    }
+</style>
+<div id="navs" style="clear:both;" class="input-group">
+<nav class="navbar navbar-default" style="width:100%;position:fixed;z-index:2;clear:both;">
+
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/en/9/96/Loyola_Jamshedpur_logo.png" width="30" height="30">
+      </a>
+
+    </div>
+    <ul class="nav navbar-nav navbar-left">
+        <span style="font-size:30px;"><u>YearBook '16</u></span></li>
+        </ul>
+
+     <ul class="nav navbar-nav navbar-right">
+
+        <div class="input-group" style="text-align:center;">
+        <form class="navbar-form navbar-left" role="search">
+        <div class="form-group" style="">
+          <dl>
+		    {% if sin!="None" %}
+			<input type="text" class="form-control" id="sin" value="{{ sin }}">
+			{% endif %}
+			{% if sin=="None" %}
+			<input type="text" class="form-control"  placeholder="Enter Name for Search" id="sin">
+			{% endif %}
+			{% if sis!="None" %}
+			<input type="text" class="form-control"  id="sis" value="{{ sis }}">
+			{% endif %}
+			{% if sis=="None" %}
+			<input type="text" class="form-control"  placeholder="Enter Section for Search" id="sis">
+			{% endif %}
+
+
+
+
+		</dl>
+        </div>
+        <button style=""type="button" onClick="searchre();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;Search</button>
+      </form>
+      </div>
+      </div>
+
+
+      </ul>
+
+</nav>
+<nav class="navbar navbar-default" style="position:relative;clear:both;margin:auto;vertical-align:middle;height:100%;width:230px;display: inline-block;float:left;position:fixed;clear:both;z-index:1;">
+  <div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li>{% if session.logged_in %}
+    {% if picc==1 %}
+
+    <div id="imgbox" style="margin-top:30%;"><img src="/getimg?admno={{ session['admno'] }}" style="width:200px;height:200px;border-radius:50%;"></div><br>
+    Update Picture
+    {% endif %}
+    {% if picc==0 %}
+    Haven't setup your picture yet?
+    {% endif %}
+
+	{% from "minion.html" import render_field %}</li>
+
+	<div class="form-group">
+	<form method="post" enctype="multipart/form-data" action="/home/">
+		<dl>
+            <button class="file-upload btn btn-default">
+			<input type = "file" class="file-input" name = "file" id="file"/><span class="glyphicon glyphicon-folder-open"></span> Choose File</button>
+
+		</dl>
+		<p>
+		    <button class="file-upload btn btn-default">
+			<input type = "submit" class="file-input" name = "file" id="file"/><span class="glyphicon glyphicon-upload"></span>Upload File</button>
+
+		</p>
+		</form>
+		</div>
+
+    {% endif %}
+
+    {% if session.logged_in %}
+    {% if postc=="0" %}
+    <li><button class="btn btn-default" onClick="window.location.href='/editpost/'"><span class="glyphicon glyphicon-pencil"></span> Create</button></li><br>
+    {% endif %}
+    {% endif %}
+
+
+
+    {% if session.logged_in %}
+    {% if postc=="1" %}
+    <li><button class="btn btn-default" onClick="window.location.href='/editpost/'"><span class="glyphicon glyphicon-pencil"></span> Edit</button></li><br>
+    {% endif %}
+    {% endif %}
+
+    <br><li><button class="btn btn-default btn-lg" type="button" id="btn1" onClick="window.location.href='/logout/'"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</button></li>
+
+
+
+
+    </ul>
+  </div>
+</nav>
+</div>
+<div id="postmain" style="display: inline-block;clear:both;position:relative;">
+
+<script type="text/javascript">
+    function searchre() {
+        var sin = document.getElementById("sin").value;
+        var sis = document.getElementById("sis").value;
+
+        if (sin=="" || sin==null) {sin="None"}
+        if (sis=="" || sis==null) {sis="None"}
+
+
+
+        var url = "/search?sin="+String(sin)+"&sis="+String(sis)+"&lt=None";
+
+        window.location.href=url;
+
+    }
+    function searchresec() {
+        var sin = document.getElementById("sin").value;
+        var sis = document.getElementById("sis").value;
+        if (sin=="" || sin==null) {sin="None"}
+        if (sis=="" || sis==null) {sis="None"}
+
+
+
+        var url = "/search?sin="+String(sin)+"&sis="+String(sis)+"&lt=sec";
+
+        window.location.href=url;
+
+    }
+    function searchreup() {
+        var sin = document.getElementById("sin").value;
+        var sis = document.getElementById("sis").value;
+        if (sin=="" || sin==null) {sin="None"}
+        if (sis=="" || sis==null) {sis="None"}
+
+
+
+        var url = "/search?sin="+String(sin)+"&sis="+String(sis)+"&lt=up";
+
+        window.location.href=url;
+
+    }
+
+</script>
+<!--
+<div class="container">
+    {% if session.logged_in %}
+    {% if postc=="0" %}
+
+	{% from "minion.html" import render_field %}
+	<form method="post" enctype="multipart/form-data" action="/posts/">
+		<dl>
+			{{ render_field(formp.title)  }}
+			{{ render_field(formp.ptext)  }}
+
+
+		</dl>
+		<p>
+			<input type="submit" value="submit">
+		</p>
+		</form>
+
+    {% endif %}
+    {% if postc=="1" %}
+    <button type="button" onClick="window.location.href='/editpost/'">EDIT</button>
+    {% endif %}
+    {% endif %}
+
+
+</div>
+//-->
+<br><br><br><br>
+<!--
+<div id="lh">
+    <button type="button" onClick="searchresec();">ORDER BY SECTION</button>
+    <button type="button" onClick="searchreup();">ORDER BY UPVOTES</button>
+
+</div>
+
+<br><br><br><br>
+//-->
+<div id="posts" style="position:relative;clear:both;margin-left:300px;clear:both">
+    {% if upvotess[l-5]!=NULL %}
+    Picture : <div id="imgbox"><img src="/getimg?admno={{ admnos[l-5] }}" style="width:50px;height=50px;"></div><br>
+    Post Title : {{ ptitles[l-5] }}<br>
+    Name : {{ names[l-5] }}<br>
+    Class : {{ classss[l-5] }}<br>
+    Section : {{ secs[l-5] }}<br>
+    Post Text : {{ ptexts[l-5] }}<br>
+    Upvotes : {{ upvotess[l-5] }}<br>
+    {% if session.logged_in %}
+
+
+    {% set p1 =  postids[l-5]~ ''  %}
+
+    {% if p1 in udcs %}
+    <button type="button" class="btn btn-success" onClick="window.location.href='/upvote?postid={{ postids[l-5] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% else %}
+    <button type="button" class="btn btn-default" onClick="window.location.href='/upvote?postid={{ postids[l-5] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% endif %}
+
+
+
+    {% endif %}
+    {% endif %}
+<br><br>
+    {% if upvotess[l-4]!=NULL %}
+    Picture : <div id="imgbox"><img src="/getimg?admno={{ admnos[l-4] }}" style="width:50px;height=50px;"></div><br>
+
+    Post Title : {{ ptitles[l-4] }}<br>
+    Name : {{ names[l-4] }}<br>
+    Class : {{ classss[l-4] }}<br>
+    Section : {{ secs[l-4] }}<br>
+    Post Text : {{ ptexts[l-4] }}<br>
+    Upvotes : {{ upvotess[l-4] }}<br>
+    {% if session.logged_in %}
+     {% set p1 =  postids[l-4]~ ''  %}
+
+    {% if p1 in udcs %}
+    <button type="button" class="btn btn-success" onClick="window.location.href='/upvote?postid={{ postids[l-4] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% else %}
+    <button type="button" class="btn btn-default" onClick="window.location.href='/upvote?postid={{ postids[l-4] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% endif %}
+
+
+    </button>
+    {% endif %}
+    {% endif %}
+<br><br>
+    {% if upvotess[l-3]!=NULL %}
+    Picture : <div id="imgbox"><img src="/getimg?admno={{ admnos[l-3] }}" style="width:50px;height:50px;"></div><br>
+    Post Title : {{ ptitles[l-3] }}<br>
+    Name : {{ names[l-3] }}<br>
+    Class : {{ classss[l-3] }}<br>
+    Section : {{ secs[l-3] }}<br>
+    Post Text : {{ ptexts[l-3] }}<br>
+    Upvotes : {{ upvotess[l-3] }}<br>
+    {% if session.logged_in %}
+     {% set p1 =  postids[l-3]~ ''  %}
+
+    {% if p1 in udcs %}
+    <button type="button" class="btn btn-success" onClick="window.location.href='/upvote?postid={{ postids[l-3] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% else %}
+    <button type="button" class="btn btn-default" onClick="window.location.href='/upvote?postid={{ postids[l-3] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% endif %}
+
+
+    </button>
+    {% endif %}
+    {% endif %}
+<br><br>
+    {% if upvotess[l-2]!=NULL %}
+    Picture : <div id="imgbox"><img src="/getimg?admno={{ admnos[l-2] }}" style="width:50px;height=50px;"></div><br>
+    Post Title : {{ ptitles[l-2] }}<br>
+    Name : {{ names[l-2] }}<br>
+    Class : {{ classss[l-2] }}<br>
+    Section : {{ secs[l-2] }}<br>
+    Post Text : {{ ptexts[l-2] }}<br>
+    Upvotes : {{ upvotess[l-2] }}<br>
+    {% if session.logged_in %}
+    {% set p1 =  postids[l-2]~ ''  %}
+
+    {% if p1 in udcs %}
+    <button type="button" class="btn btn-success" onClick="window.location.href='/upvote?postid={{ postids[l-2] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% else %}
+    <button type="button" class="btn btn-default" onClick="window.location.href='/upvote?postid={{ postids[l-2] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% endif %}
+
+
+    </button>
+    {% endif %}
+    {% endif %}
+<br><br>
+    {% if upvotess[l-1]!=NULL %}
+    Picture : <div id="imgbox"><img src="/getimg?admno={{ admnos[l-1] }}" style="width:50px;height=50px;"></div><br>
+    Post Title : {{ ptitles[l-1] }}<br>
+    Name : {{ names[l-1] }}<br>
+    Class : {{ classss[l-1] }}<br>
+    Section : {{ secs[l-1] }}<br>
+    Post Text : {{ ptexts[l-1] }}<br>
+    Upvotes : {{ upvotess[l-1] }}<br>
+    {% if session.logged_in %}
+    {% set p1 =  postids[l-1]~ ''  %}
+
+    {% if p1 in udcs %}
+    <button type="button" class="btn btn-success" onClick="window.location.href='/upvote?postid={{ postids[l-1] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% else %}
+    <button type="button" class="btn btn-default" onClick="window.location.href='/upvote?postid={{ postids[l-1] }}&pagen={{ factor }}'">UPVOTE</button>
+    {% endif %}
+
+
+    </button>
+    {% endif %}
+    {% endif %}
+<br><br>
+
+<br><br>
+{% if factor!=1 %}
+<button type="button" onClick="window.location.href='/posts/?page={{ factor-1 }}'">PREVIOUS PAGE</button>
+{% endif %}
+<button type="button" onClick="window.location.href='/posts/?page={{ factor+1 }}'">NEXT PAGE</button>
+
+</div>
+</div>
+</html>
+
+<noscript><meta HTTP-EQUIV="REFRESH" content="0; url=http://ybehwp.pythonanywhere.com/error/"></noscript>
+{% endblock %}
