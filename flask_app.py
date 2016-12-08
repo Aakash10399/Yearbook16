@@ -1,4 +1,3 @@
-
 import os
 from dbconn import connection
 from wtforms import Form, TextField, validators, FileField
@@ -24,8 +23,6 @@ class EditForm(Form):
 @app.route('/editpost/', methods=["GET","POST"])
 def editpost():
     try:
-
-
         postc="2"
         sin="None"
         sis="None"
@@ -57,9 +54,6 @@ def editpost():
             conn.close()
             gc.collect()
             return redirect(url_for('posts'))
-
-
-
         else:
 
             if session['logged_in']==True:
@@ -71,7 +65,6 @@ def editpost():
                 c.close()
                 conn.close()
                 gc.collect()
-
             if session['logged_in']==True:
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE admno=%s",(session['admno'],))
@@ -97,63 +90,33 @@ def editpost():
 @app.route('/getimg')
 def getimg():
     filename = request.args.get('admno')+'.jpg'
-
-
     return send_file(filename)
-
-
 
 logerr = False
 @app.route('/', methods=["GET","POST"])
 @app.route('/home/', methods=["GET","POST"])
 def index():
     try:
-
         formr= RegForm(request.form)
-
-
-
         if session['logged_in']==True and request.method!="POST":
 
             c, conn= connection()
             c.execute("SELECT * FROM RegLog WHERE admno=%s",(session['admno'],))
             picc = [item1[5] for item1 in c.fetchall()]
-
-
-
-
             return render_template("index.html",picc=picc[0],formr=formr,logerr=logerr)
-
-
-
-
-
-
-
         if request.method=="POST" and session['logged_in']==True:
-
-
             file = request.files['file']
             filename = secure_filename(session['admno'])+'.jpg'
-
             file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
             c, conn = connection()
-
             c.execute("UPDATE RegLog SET picc=1 WHERE admno=%s",(session['admno'],))
             conn.commit()
-
             c.close()
             conn.close()
             gc.collect()
             return redirect(url_for('index'))
-
-
-
-
         if session['logged_in']!=True and request.method!="POST":
             return render_template("index.html",formr=formr,logerr=logerr)
-
-
     except Exception as e:
         return render_template("index.html",formr=formr,logerr=logerr)
 
@@ -166,13 +129,6 @@ def dbconn():
     except Exception as e:
         return (str(e))
 
-
-
-
-
-
-
-
 class PostForm(Form):
     title = TextField('Title',[validators.Length(min=1,max=50),validators.Required()])
     ptext = TextField('Post',[validators.Length(min=1,max=10000),validators.Required()])
@@ -183,9 +139,6 @@ class RegForm(Form):
     sec = TextField('Section',[validators.Length(min=1,max=10), validators.Required()])
     admno = TextField('Admission Number',[validators.Length(min=1,max=10), validators.Required()])
 
-
-
-
 @app.route('/register/', methods=["GET","POST"])
 def register():
     try:
@@ -195,7 +148,6 @@ def register():
         if request.method=="POST" and formr.validate()!=True:
             err = True
             return render_template("index.html",err=err,formr=formr)
-
         if request.method=="POST" and formr.validate():
             name= formr.name.data
             classs= formr.classs.data
@@ -203,22 +155,16 @@ def register():
             admno= formr.admno.data
             name = name.lower()
             name = name.title()
-
             sec = sec.lower()
             sec = sec.title()
             c, conn = connection()
-
             x = c.execute("SELECT * FROM RegLog WHERE name = (%s) AND classs = (%s) AND sec = (%s) AND admno = (%s) ",
                           (thwart(name),thwart(classs),thwart(sec),thwart(admno)))
-
             if int(x) > 0:
-
                 conn.commit()
                 c.close()
                 conn.close()
                 gc.collect()
-
-
                 session['logged_in'] = True
                 session['name'] = name
                 session['admno'] = admno
@@ -233,8 +179,6 @@ def register():
     except Exception as e:
         return (str(e))
 
-
-
 @app.route('/posts/' , methods=["GET","POST"])
 def posts():
     try:
@@ -245,23 +189,16 @@ def posts():
         global cbool
         global ts
         global te
-
-
-
-
         postc="2"
         formp= PostForm(request.form)
         formr= RegForm(request.form)
         c, conn= connection()
         c.execute("SELECT * FROM RegLog WHERE admno=%s",(session['admno'],))
         picc = [item1[5] for item1 in c.fetchall()]
-
         factor = request.args.get('page',default=1,type=int)
         l = factor * 5
         udcs = "None"
-
         if lt!="sec":
-
             c, conn = connection()
             c.execute("SELECT * FROM Posts ORDER BY upvotes DESC")
             ptitles = [item1[0] for item1 in c.fetchall()]
@@ -286,11 +223,7 @@ def posts():
             c, conn = connection()
             c.execute("SELECT * FROM Posts ORDER BY upvotes DESC")
             admnos = [item8[8] for item8 in c.fetchall()]
-
-
-
         if lt=="sec":
-
             c, conn = connection()
             c.execute("SELECT * FROM Posts ORDER BY sec ASC")
             ptitles = [item1[0] for item1 in c.fetchall()]
@@ -315,17 +248,9 @@ def posts():
             c, conn = connection()
             c.execute("SELECT * FROM Posts ORDER BY sec ASC")
             admnos = [item8[8] for item8 in c.fetchall()]
-
         if srcho==True:
             srcho=False
-
-
-
-
             if sin!="None" and sis=="None" and lt=="sec" and cbool==True:
-
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s ORDER BY sec ASC",("%"+sin+"%",))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -351,9 +276,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s ORDER BY sec ASC",("%"+sin+"%",))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis=="None" and lt=="up" and cbool==True:
-
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s ORDER BY upvotes DESC",("%"+sin+"%",))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -379,8 +301,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s ORDER BY upvotes DESC",("%"+sin+"%",))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis=="None" and lt=="None" and cbool==True:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s",("%"+sin+"%",))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -406,8 +326,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s",("%"+sin+"%",))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis=="None" and lt=="up" and cbool==False:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s ORDER BY upvotes DESC",(sin,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -433,8 +351,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name=%s ORDER BY upvotes DESC",(sin,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis=="None" and lt=="sec" and cbool==False:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s ORDER BY sec ASC",(sin,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -460,9 +376,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name=%s ORDER BY sec ASC",(sin,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis=="None" and lt=="None" and cbool==False:
-
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s",(sin,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -487,11 +400,7 @@ def posts():
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s",(sin,))
                 admnos = [item8[8] for item8 in c.fetchall()]
-
-
             if sin!="None" and sis!="None" and lt=="None" and cbool==True:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s AND sec=%s",("%"+sin+"%",sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -517,8 +426,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s AND sec=%s",("%"+sin+"%",sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis!="None" and lt=="sec" and cbool==True:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s AND sec=%s ORDER BY sec ASC",("%"+sin+"%",sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -544,9 +451,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s AND sec=%s ORDER BY sec ASC",("%"+sin+"%",sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis!="None" and lt=="up" and cbool==True:
-
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s AND sec=%s ORDER BY upvotes DESC",("%"+sin+"%",sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -572,7 +476,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name LIKE %s AND sec=%s ORDER BY upvotes DESC",("%"+sin+"%",sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis!="None" and lt=="up" and cbool==False:
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s AND sec=%s ORDER BY upvotes DESC",(sin,sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -598,7 +501,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name=%s AND sec=%s ORDER BY upvotes DESC",(sin,sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis!="None" and lt=="sec" and cbool==False:
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s AND sec=%s ORDER BY sec ASC",(sin,sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -624,7 +526,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE name=%s AND sec=%s ORDER BY sec ASC",(sin,sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin!="None" and sis!="None" and lt=="None" and cbool==False:
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s AND sec=%s",(sin,sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -649,10 +550,7 @@ def posts():
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE name=%s AND sec=%s",(sin,sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
-
-
             if sin=="None" and sis!="None" and lt=="up" and cbool==False:
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE sec=%s ORDER BY upvotes DESC",(sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -678,8 +576,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE sec=%s ORDER BY upvotes DESC",(sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin=="None" and sis!="None" and lt=="sec" and cbool==False:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE sec=%s ORDER BY sec ASC",(sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -705,8 +601,6 @@ def posts():
                 c.execute("SELECT * FROM Posts WHERE sec=%s ORDER BY sec ASC",(sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
             if sin=="None" and sis!="None" and lt=="None" and cbool==False:
-
-
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE sec=%s",(sis,))
                 ptitles = [item1[0] for item1 in c.fetchall()]
@@ -731,13 +625,6 @@ def posts():
                 c, conn = connection()
                 c.execute("SELECT * FROM Posts WHERE sec=%s",(sis,))
                 admnos = [item8[8] for item8 in c.fetchall()]
-
-
-
-
-
-
-
         if session['logged_in']==True:
             c, conn = connection()
             c.execute("SELECT * FROM RegLog WHERE admno=%s",(session['admno'],))
@@ -747,79 +634,38 @@ def posts():
             c.close()
             conn.close()
             gc.collect()
-
             c, conn = connection()
             c.execute("SELECT * FROM RegLog WHERE admno=%s",(session['admno'],))
-
             udcs = [item10[7] for item10 in c.fetchall()]
             udcs = udcs[0]
             udcs = udcs.split(',')
-
             conn.commit()
             c.close()
             conn.close()
             gc.collect()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         if request.method=="POST" and formp.validate():
             title=formp.title.data
             ptext=formp.ptext.data
             l = str("startingvalue,secondstartingvalue")
-
-
-
-
             if session['logged_in']==True:
                 c, conn = connection()
                 c.execute("INSERT INTO Posts (ptitle, ptext, name, sec, classs, admno, upvotesid) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                           (title, ptext, session['name'], session['sec'],session['classs'],session['admno'],l))
-
-
                 conn.commit()
-
                 c.close()
                 conn.close()
                 gc.collect()
                 c, conn = connection()
                 c.execute("UPDATE RegLog SET postc='1' WHERE admno=%s",(session['admno'],))
                 conn.commit()
-
                 c.close()
                 conn.close()
                 gc.collect()
                 return redirect(url_for('posts'))
-
-
-
-
-
-
-
         else:
             return render_template("posts.html",picc=picc[0],sin=sin,sis=sis,udcs=udcs,formr=formr,formp=formp,ptitles=ptitles,upvotess=upvotess,l=l,factor=factor,postc=postc,ptexts=ptexts,names=names,classss=classss,secs=secs,postids=postids,admnos=admnos)
-
-
-
-
-
     except Exception as e:
         return render_template("posts.html",picc=picc[0],sin=sin,sis=sis,udcs=udcs,formr=formr,formp=formp,ptitles=ptitles,upvotess=upvotess,l=l,factor=factor,postc=postc,ptexts=ptexts,names=names,classss=classss,secs=secs,postids=postids,admnos=admnos)
-
-
-
 
 @app.route('/logout/')
 def logout():
@@ -842,8 +688,6 @@ def search():
         global srcho
         global lt
         global cbool
-
-
         srcho = True
         sin = request.args.get('sin',type=str)
         sis = request.args.get('sis',type=str)
@@ -858,21 +702,11 @@ def search():
         temp = len(sin.split())
         if temp==1 and sin!="None":
             cbool=True
-
         else:
             cbool=False
-
-
-
         return redirect(url_for('posts'))
-
-
-
     except Exception as e:
         return str(e)
-
-
-
 
 @app.route('/upvote/')
 def upvote():
@@ -885,7 +719,6 @@ def upvote():
             c.execute("SELECT * FROM Posts WHERE postid=%s",(tbu,))
             upvotesid = [item1[9] for item1 in c.fetchall()]
             conn.commit()
-
             c.close()
             conn.close()
             gc.collect()
@@ -893,78 +726,45 @@ def upvote():
             c.execute("SELECT * FROM RegLog WHERE admno=%s",(session['admno'],))
             udc = [item2[7] for item2 in c.fetchall()]
             conn.commit()
-
             c.close()
             conn.close()
             gc.collect()
             temp = str(upvotesid[0])
             temp2 = str(udc[0])
             ul = temp.split(',')
-
             if session['admno'] in ul:
                 sl = temp.replace((","+session['admno']),"")
-
                 c, conn = connection()
-
                 c.execute("UPDATE Posts SET upvotes=upvotes-1,upvotesid=%s WHERE postid=%s",(sl,tbu,))
                 conn.commit()
-
                 c.close()
                 conn.close()
                 gc.collect()
-
                 sl2 = temp2.replace((","+tbu),"")
-
                 c, conn = connection()
-
                 c.execute("UPDATE RegLog SET udc=%s WHERE admno=%s",(sl2,session['admno'],))
                 conn.commit()
-
                 c.close()
                 conn.close()
                 gc.collect()
-
-
                 return redirect(backl)
-
-
             else:
-
-
-
-
-
-
-
                 sl  = temp+","+session['admno']
-
                 c, conn = connection()
-
                 c.execute("UPDATE Posts SET upvotes=upvotes+1,upvotesid=%s WHERE postid=%s",(sl,tbu,))
                 conn.commit()
-
                 c.close()
                 conn.close()
                 gc.collect()
-
-
-
                 sl2  = temp2+","+tbu
-
                 c, conn = connection()
-
                 c.execute("UPDATE RegLog SET udc=%s WHERE admno=%s",(sl2,session['admno'],))
                 conn.commit()
-
                 c.close()
                 conn.close()
                 gc.collect()
-
-
                 return redirect(backl)
-
         else:
             return redirect(url_for('index'))
-
     except Exception as e:
         return (str(e))
